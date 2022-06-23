@@ -26,17 +26,14 @@ encoders = {
 def dataframe_to_dict(df):
     result = dict()
     for column in df.columns:
-       values = data_frame[column].values
-       result[column] = values
+        result[column] = df[column].values
     return result
 
 
 def make_suoervised(df):
-    raw_input_data = data_frame[input_names]
-    raw_output_data = data_frame[output_names]
     return {
-        "inputs": dataframe_to_dict(raw_input_data),
-        "outputs": dataframe_to_dict(raw_output_data)
+        "inputs": dataframe_to_dict(df[input_names]),
+        "outputs": dataframe_to_dict(df[output_names])
     }
 
 
@@ -71,7 +68,7 @@ model = k.Sequential()
 model.add(k.layers.Dense(units=5, activation="relu"))
 model.add(k.layers.Dense(units=1, activation="sigmoid"))
 model.compile(loss="mse", optimizer="sgd", metrics=["accuracy"])
-fit_results = model.fit(x=tf.expand_dims(train_x, axis=1), y=train_y, epochs=100, validation_split=0.2)
+fit_results = model.fit(x=tf.expand_dims(train_x, axis=1), y=train_y, epochs=500, validation_split=0.2)
 
 plt.title("Losses train/validation")
 plt.plot(fit_results.history["loss"], label="Train")
